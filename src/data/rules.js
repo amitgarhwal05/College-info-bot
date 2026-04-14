@@ -1,5 +1,13 @@
+/* =========================
+   🎓 RULES DATA
+========================= */
+
 export const rules = [
   // 🎓 Clubs
+  {
+    keywords: ["dance club"],
+    response: "The Dance Club practices every evening in the auditorium."
+  },
   {
     keywords: ["robotics", "robotics club"],
     response: "The Robotics Club meets every Friday at 5 PM in Block C."
@@ -7,10 +15,6 @@ export const rules = [
   {
     keywords: ["coding club", "programming club"],
     response: "The Coding Club conducts weekly coding contests and workshops."
-  },
-  {
-    keywords: ["dance club"],
-    response: "The Dance Club practices every evening in the auditorium."
   },
   {
     keywords: ["music club"],
@@ -24,11 +28,11 @@ export const rules = [
   },
   {
     keywords: ["canteen", "food"],
-    response: "The canteen serves breakfast, lunch, and snacks at affordable prices."
+    response: "The canteen serves affordable and hygienic meals."
   },
   {
     keywords: ["wifi", "internet"],
-    response: "Free WiFi is available across the campus for students."
+    response: "Free high-speed WiFi is available across campus."
   },
   {
     keywords: ["lab", "computer lab"],
@@ -37,77 +41,85 @@ export const rules = [
 
   // 📖 Academics
   {
-    keywords: ["subjects", "courses"],
-    response: "We offer subjects like DSA, DBMS, OS, and Web Development."
+    keywords: ["courses", "subjects"],
+    response: "Courses include CSE, AI, Data Science, BBA, MBA, and more."
+  },
+  {
+    keywords: ["cse", "computer science"],
+    response: "CSE includes DSA, Web Dev, AI, DBMS and more."
   },
   {
     keywords: ["faculty", "teachers"],
-    response: "Our faculty members are highly qualified and experienced."
+    response: "Faculty members are qualified and supportive."
   },
   {
     keywords: ["attendance"],
-    response: "Students must maintain at least 75% attendance."
+    response: "Minimum 75% attendance is required."
   },
 
   // 📝 Exams
   {
-    keywords: ["exam", "exams", "examination"],
-    response: "Exams are conducted at the end of each semester."
+    keywords: ["exam", "exams"],
+    response: "Exams are conducted semester-wise."
   },
   {
-    keywords: ["result", "results"],
-    response: "Results are published on the college portal."
+    keywords: ["result"],
+    response: "Results are available on the student portal."
   },
   {
-    keywords: ["timetable", "schedule"],
-    response: "Exam timetable is shared 2 weeks before exams."
+    keywords: ["timetable"],
+    response: "Timetable is shared before exams."
   },
 
   // 🏠 Hostel
   {
     keywords: ["hostel"],
-    response: "Hostel facilities are available for boys and girls."
-  },
-  {
-    keywords: ["hostel fee"],
-    response: "Hostel fee details are available at the administration office."
+    response: "Hostel facilities include mess, WiFi and security."
   },
   {
     keywords: ["mess"],
-    response: "Mess provides breakfast, lunch, and dinner daily."
+    response: "Mess provides breakfast, lunch and dinner."
   },
 
   // 💼 Placement
   {
-    keywords: ["placement", "jobs"],
-    response: "Top companies visit campus every year for placements."
+    keywords: ["placement", "job"],
+    response: "Companies like TCS, Infosys, Wipro visit campus."
   },
   {
     keywords: ["internship"],
-    response: "Internship opportunities are provided in the 3rd year."
+    response: "Internships are available from 2nd/3rd year."
+  },
+
+  // 💰 Fees
+  {
+    keywords: ["fees"],
+    response: "B.Tech fees are approx ₹80k–₹1.2L per year."
   },
 
   // 📍 General
   {
-    keywords: ["location", "where is college"],
-    response: "The campus is located in the city center."
+    keywords: ["location", "jaipur"],
+    response: "Poornima University is located in Sitapura, Jaipur."
   },
   {
-    keywords: ["contact", "phone"],
-    response: "You can contact the college at +91-1234567890."
+    keywords: ["transport", "bus"],
+    response: "Bus facility is available across the city."
   },
+
+  // 🎉 Events
   {
-    keywords: ["office", "administration"],
-    response: "The admin office is open from 9 AM to 5 PM."
+    keywords: ["fest", "event"],
+    response: "Events like Lakshya Fest, hackathons and workshops are आयोजित."
   },
 
   // 👋 Greetings
   {
     keywords: ["hi", "hello", "hey"],
-    response: "Hello! How can I help you today?"
+    response: "Hello! How can I help you?"
   },
   {
-    keywords: ["bye", "goodbye"],
+    keywords: ["bye"],
     response: "Goodbye! Have a great day 😊"
   }
 ];

@@ -9,6 +9,7 @@ function Chatbot() {
     const [messages, setMessages] = useState([
         { sender: "bot", text: "👋 Welcome! Ask me anything about campus." }
     ]);
+    
     const [lastBotMessage, setLastBotMessage] = useState("");
     const chatEndRef = useRef(null);
     const scrollToBottom = () => {

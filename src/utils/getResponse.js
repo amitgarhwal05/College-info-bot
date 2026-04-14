@@ -1,95 +1,102 @@
 import { rules } from "../data/rules";
 
-// 🔤 Edit Distance
-function getEditDistance(a, b) {
-  const dp = Array(a.length + 1)
-    .fill(null)
-    .map(() => Array(b.length + 1).fill(null));
-
-  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
-  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-
-  for (let i = 1; i <= a.length; i++) {
-    for (let j = 1; j <= b.length; j++) {
-      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-
-      dp[i][j] = Math.min(
-        dp[i - 1][j] + 1,
-        dp[i][j - 1] + 1,
-        dp[i - 1][j - 1] + cost
-      );
-    }
-  }
-
-  return dp[a.length][b.length];
+/* =========================
+   🧠 CLEAN TEXT
+========================= */
+function cleanText(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, "")
+    .trim();
 }
 
-// 🎯 Fuzzy matching
-function isSimilar(word, keyword) {
-  if (word.length < 4) return false;
-  if (Math.abs(word.length - keyword.length) > 1) return false;
+/* =========================
+   🔍 SIMILARITY (FUZZY)
+========================= */
+function similarity(a, b) {
+  let matches = 0;
 
-  return getEditDistance(word, keyword) <= 1;
+  a.split("").forEach((char) => {
+    if (b.includes(char)) matches++;
+  });
+
+  return matches / Math.max(a.length, b.length);
 }
 
-// ❌ Ignore weak/common words
-const STOP_WORDS = ["club", "the", "about", "tell", "me", "is", "what"];
-
-// 🤖 MAIN FUNCTION
+/* =========================
+   🎯 MAIN RESPONSE
+========================= */
 export function getResponse(input) {
-  const text = input.toLowerCase();
-  const words = text.split(" ").filter(w => !STOP_WORDS.includes(w));
+  const msg = cleanText(input);
 
-  let matchedResponses = [];
+  /* =========================
+     🔥 PRIORITY RULES
+  ========================= */
 
-  // =========================
-  // ✅ STEP 1: EXACT MATCH (STRONG)
-  // =========================
-  for (let rule of rules) {
-    for (let keyword of rule.keywords) {
-      if (text.includes(keyword)) {
-        matchedResponses.push(rule.response);
-        break;
+  if (msg.includes("dance club")) {
+    return "The Dance Club practices every evening in the auditorium 💃";
+  }
+
+  if (msg.includes("fees") && msg.includes("placement")) {
+    return "Fees are approx ₹80k–₹1.2L per year 💰 and companies like TCS, Infosys visit campus 💼";
+  }
+
+  /* =========================
+     🧠 SCORING SYSTEM
+  ========================= */
+
+  let bestMatches = [];
+
+  rules.forEach((rule) => {
+    let score = 0;
+
+    rule.keywords.forEach((keyword) => {
+      const cleanKeyword = cleanText(keyword);
+
+      // exact match
+      if (msg.includes(cleanKeyword)) {
+        score += 2;
       }
-    }
-  }
 
-  // =========================
-  // ✅ STEP 2: IMPORTANT WORD MATCH (NO GENERIC WORDS)
-  // =========================
-  for (let rule of rules) {
-    for (let keyword of rule.keywords) {
-      for (let word of words) {
-        if (keyword === word) {
-          matchedResponses.push(rule.response);
-          break;
-        }
+      // fuzzy match
+      if (similarity(msg, cleanKeyword) > 0.6) {
+        score += 1;
       }
+    });
+
+    if (score > 0) {
+      bestMatches.push({
+        response: rule.response,
+        score: score,
+      });
     }
+  });
+
+  /* =========================
+     🧠 SORT BEST MATCHES
+  ========================= */
+
+  bestMatches.sort((a, b) => b.score - a.score);
+
+  /* =========================
+     🎯 MULTI RESPONSE (TOP 2)
+  ========================= */
+
+  const finalResponses = bestMatches
+    .slice(0, 2)
+    .map((item) => item.response);
+
+  if (finalResponses.length > 0) {
+    return [...new Set(finalResponses)].join(" ");
   }
 
-  // =========================
-  // ✅ STEP 3: FUZZY MATCH (SAFE)
-  // =========================
-  for (let rule of rules) {
-    for (let keyword of rule.keywords) {
-      for (let word of words) {
-        if (isSimilar(word, keyword)) {
-          matchedResponses.push(rule.response);
-          break;
-        }
-      }
-    }
+  /* =========================
+     🤖 SMART FALLBACK
+  ========================= */
+
+  if (msg.includes("hi") || msg.includes("hello")) {
+    return "Hey 👋 Ask me anything about Poornima University!";
   }
 
-  // =========================
-  // ✅ CLEAN RESULTS
-  // =========================
-  matchedResponses = [...new Set(matchedResponses)];
-
-  if (matchedResponses.length > 0) {
-    return matchedResponses.join(" ");
-  }
-
-  return "Sorry, I couldn't understand. Try asking about campus facilities, exams, or clubs.";
+  return "I didn’t fully understand 🤔 Try asking about courses, fees, placements, hostel, events or timetable.";
 }

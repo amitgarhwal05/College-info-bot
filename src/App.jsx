@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Events from "./components/Events";
 import Faculty from "./components/Faculty";
+import Courses from "./components/Courses";
 
 function App() {
   return (
@@ -30,14 +31,15 @@ function App() {
       </div>
 
       {/* YOUR CHAT UI */}
-    
+
 
       <Routes>
 
-        <Route path="/" element={<Chatbot/>} />
-       <Route path="/timetable" element={<Timetable/>}/>
-        <Route path="/events" element={<Events/>} />
-        <Route path="/faculty" element={<Faculty/>} />
+        <Route path="/" element={<Chatbot />} />
+        <Route path="/timetable" element={<Timetable />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/faculty" element={<Faculty />} />
+        <Route path="/courses" element={<Courses />} />
       </Routes>
 
     </div>
