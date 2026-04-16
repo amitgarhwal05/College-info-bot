@@ -1,102 +1,131 @@
 import { rules } from "../data/rules";
 
 /* =========================
-   🧠 CLEAN TEXT
+   🧠 AI SPELL CORRECTION
 ========================= */
-function cleanText(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, "")
-    .trim();
+
+// Levenshtein Distance
+function getDistance(a, b) {
+  const matrix = [];
+
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
 }
 
 /* =========================
-   🔍 SIMILARITY (FUZZY)
+   🔍 FIND BEST MATCH WORD
 ========================= */
-function similarity(a, b) {
-  let matches = 0;
-
-  a.split("").forEach((char) => {
-    if (b.includes(char)) matches++;
-  });
-
-  return matches / Math.max(a.length, b.length);
-}
-
-/* =========================
-   🎯 MAIN RESPONSE
-========================= */
-export function getResponse(input) {
-  const msg = cleanText(input);
-
-  /* =========================
-     🔥 PRIORITY RULES
-  ========================= */
-
-  if (msg.includes("dance club")) {
-    return "The Dance Club practices every evening in the auditorium 💃";
-  }
-
-  if (msg.includes("fees") && msg.includes("placement")) {
-    return "Fees are approx ₹80k–₹1.2L per year 💰 and companies like TCS, Infosys visit campus 💼";
-  }
-
-  /* =========================
-     🧠 SCORING SYSTEM
-  ========================= */
-
-  let bestMatches = [];
+function correctWord(word, rules) {
+  let allKeywords = [];
 
   rules.forEach((rule) => {
-    let score = 0;
+    allKeywords.push(...rule.keywords);
+  });
 
-    rule.keywords.forEach((keyword) => {
-      const cleanKeyword = cleanText(keyword);
+  let bestMatch = word;
+  let minDistance = Infinity;
 
-      // exact match
-      if (msg.includes(cleanKeyword)) {
-        score += 2;
-      }
+  allKeywords.forEach((keyword) => {
+    const distance = getDistance(word, keyword);
 
-      // fuzzy match
-      if (similarity(msg, cleanKeyword) > 0.6) {
-        score += 1;
-      }
-    });
-
-    if (score > 0) {
-      bestMatches.push({
-        response: rule.response,
-        score: score,
-      });
+    if (distance < minDistance && distance <= 2) {
+      minDistance = distance;
+      bestMatch = keyword;
     }
   });
 
+  return bestMatch;
+}
+
+/* =========================
+   ✨ CORRECT FULL SENTENCE
+========================= */
+function autoCorrect(input, rules) {
+  return input
+    .toLowerCase()
+    .split(" ")
+    .map((word) => correctWord(word, rules))
+    .join(" ");
+}
+
+/* =========================
+   🤖 MAIN RESPONSE FUNCTION
+========================= */
+export function getResponse(input) {
+
+  // 🔥 STEP 1: AUTO CORRECT
+  const correctedInput = autoCorrect(input, rules);
+  const msg = correctedInput.toLowerCase();
+
+  let responses = [];
+
   /* =========================
-     🧠 SORT BEST MATCHES
+     ⚡ PRIORITY RULES
   ========================= */
 
-  bestMatches.sort((a, b) => b.score - a.score);
+  if (msg.includes("btech fees")) {
+    return "B.Tech fees is approximately ₹1.96 lakh per year.";
+  }
 
-  /* =========================
-     🎯 MULTI RESPONSE (TOP 2)
-  ========================= */
+  if (msg.includes("mba fees")) {
+    return "MBA fees range from ₹2.30 lakh to ₹4 lakh.";
+  }
 
-  const finalResponses = bestMatches
-    .slice(0, 2)
-    .map((item) => item.response);
-
-  if (finalResponses.length > 0) {
-    return [...new Set(finalResponses)].join(" ");
+  if (msg.includes("placement")) {
+    return "Average placement for B.Tech is around ₹4–5 lakh per year.";
   }
 
   /* =========================
-     🤖 SMART FALLBACK
+     📚 RULE MATCHING
   ========================= */
 
-  if (msg.includes("hi") || msg.includes("hello")) {
-    return "Hey 👋 Ask me anything about Poornima University!";
+  rules.forEach((rule) => {
+    rule.keywords.forEach((keyword) => {
+      if (msg.includes(keyword)) {
+        responses.push(rule.response);
+      }
+    });
+  });
+
+  // remove duplicates
+  responses = [...new Set(responses)];
+
+  /* =========================
+     💡 SHOW CORRECTION (OPTIONAL)
+  ========================= */
+
+  if (input.toLowerCase() !== correctedInput && responses.length > 0) {
+    return `Showing results for "${correctedInput}"\n\n${responses.join(" ")}`;
   }
 
-  return "I didn’t fully understand 🤔 Try asking about courses, fees, placements, hostel, events or timetable.";
+  /* =========================
+     ✅ FINAL RESPONSE
+  ========================= */
+
+  if (responses.length > 0) {
+    return responses.join(" ");
+  }
+
+  return "I didn’t understand. Try asking about courses, fees, placement, hostel or facilities.";
 }

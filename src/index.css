@@ -600,3 +600,179 @@ body {
   background: #fee2e2;
   color: #991b1b;
 }
+
+.app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden; /* removes body scrollbar */
+}
+
+/* SIDEBAR FIX */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* MAIN CONTENT SHIFT */
+.main-content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #374151;
+  transition: 0.2s;
+}
+
+/* hover */
+.menu-item:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+/* 🔥 ACTIVE PAGE */
+.menu-item.active {
+  background: #4f46e5;
+  color: white;
+}
+
+.menu-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #374151;
+  transition: 0.2s;
+}
+
+/* hover */
+.menu-item:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+/* 🔥 ACTIVE PAGE */
+.menu-item.active {
+  background: #4f46e5;
+  color: white;
+}
+
+
+/* PAGE */
+.lakshya-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f4f6;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* HERO */
+.lakshya-hero {
+  position: relative;
+  background: #0f3d75;
+  color: white;
+  border-bottom-right-radius: 80px;
+  overflow: hidden;
+  height: 300px;
+}
+
+/* BACKGROUND IMAGE */
+.hero-bg {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  
+}
+
+/* HERO TEXT */
+.hero-content {
+  position: relative;
+  padding: 60px 40px;
+}
+
+.hero-content h1 {
+  font-size: 60px;
+  color: #facc15; /* yellow */
+  margin-bottom: 10px;
+  font-family: serif;
+}
+
+.hero-content h2 {
+  font-size: 32px;
+  font-weight: 400;
+}
+
+/* CONTENT */
+.lakshya-content {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background: white;
+  line-height: 1.7;
+  color: #374151;
+  border-radius: 10px;
+}
+
+/* TEXT SPACING */
+.lakshya-content p {
+  margin-bottom: 16px;
+}
+
+.event-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.event-card {
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.event-card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* GALLERY */
+.lakshya-gallery {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 10px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+/* IMAGES */
+.lakshya-gallery img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+/* HOVER EFFECT */
+.lakshya-gallery img:hover {
+  transform: scale(1.05);
+}
